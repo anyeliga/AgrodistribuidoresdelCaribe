@@ -1,0 +1,1215 @@
+<!doctype html>
+<html lang="es" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agrodistribuidores del Caribe</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=Jost:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['Playfair Display', 'Georgia', 'serif'],
+            sans: ['Jost', 'sans-serif']
+          },
+          colors: {
+            brand: { light: '#F0F4E8', cream: '#E8F1DC', dark: '#2D5016', accent: '#6B9D3E', soil: '#8B6F47', plant: '#4CAF50' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html, body { height: 100%; margin: 0; }
+    * { box-sizing: border-box; }
+    .app-wrapper { height: 100%; overflow-y: auto; overflow-x: hidden; }
+    
+    /* Animations */
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .fade-in-up { animation: fadeInUp 0.8s ease forwards; opacity: 0; }
+    .fade-in { animation: fadeIn 0.6s ease forwards; opacity: 0; }
+    .delay-1 { animation-delay: 0.2s; }
+    .delay-2 { animation-delay: 0.4s; }
+    .delay-3 { animation-delay: 0.6s; }
+    .delay-4 { animation-delay: 0.8s; }
+    
+    .scroll-reveal { opacity: 0; transform: translateY(30px); transition: all 0.7s ease; }
+    .scroll-reveal.visible { opacity: 1; transform: translateY(0); }
+    
+    /* Slider */
+    .slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.2s ease; }
+    .slide.active { opacity: 1; }
+    
+    /* Product hover */
+    .product-card:hover .product-actions { opacity: 1; transform: translateY(0); }
+    .product-card:hover .product-img { transform: scale(1.05); }
+    .product-actions { opacity: 0; transform: translateY(10px); transition: all 0.3s ease; }
+    .product-img { transition: transform 0.5s ease; }
+    
+    /* Category hover */
+    .category-card:hover .category-overlay { opacity: 1; }
+    .category-card:hover .category-img { transform: scale(1.08); }
+    .category-img { transition: transform 0.6s ease; }
+    .category-overlay { opacity: 0; transition: opacity 0.4s ease; }
+    
+    /* Buttons */
+    .btn-primary { transition: all 0.3s ease; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(45, 80, 22, 0.2); }
+    
+    /* Mobile menu */
+    .mobile-menu { transform: translateX(-100%); transition: transform 0.3s ease; }
+    .mobile-menu.open { transform: translateX(0); }
+    
+    /* Modal */
+    .modal-backdrop { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+    .modal-backdrop.open { opacity: 1; pointer-events: all; }
+    .modal-content { transform: scale(0.9); transition: transform 0.3s ease; }
+    .modal-backdrop.open .modal-content { transform: scale(1); }
+    
+    /* Testimonial */
+    .testimonial-slide { opacity: 0; position: absolute; transition: opacity 0.6s ease; }
+    .testimonial-slide.active { opacity: 1; position: relative; }
+    
+    /* Scrollbar */
+    .app-wrapper::-webkit-scrollbar { width: 6px; }
+    .app-wrapper::-webkit-scrollbar-thumb { background: #6B9D3E; border-radius: 3px; }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full font-sans text-brand-dark bg-brand-light">
+  <div class="app-wrapper w-full" id="app">
+   <!-- HEADER -->
+   <header id="header" class="sticky top-0 z-50 bg-brand-light/95 backdrop-blur-sm border-b border-brand-accent/20 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="flex items-center justify-between h-16 lg:h-20">
+      <!-- Mobile menu btn --> <button id="menuBtn" class="lg:hidden p-2" aria-label="Menu"> <i data-lucide="menu" class="w-6 h-6"></i> </button> <!-- Logo --> <a href="#" class="font-serif text-2xl lg:text-3xl font-bold tracking-tight text-brand-dark" id="logo-text">Agrodistribuidores del Caribe</a> <!-- Nav -->
+      <nav class="hidden lg:flex items-center gap-8">
+       <button onclick="scrollToHome()" class="text-sm font-medium hover:text-brand-accent transition-colors">Inicio</button> <a href="#productos" class="text-sm font-medium hover:text-brand-accent transition-colors">Tienda</a> <a href="#categorias" class="text-sm font-medium hover:text-brand-accent transition-colors">Categorías</a> <a href="#galeria" class="text-sm font-medium hover:text-brand-accent transition-colors">Momentos</a> <a href="#blog" class="text-sm font-medium hover:text-brand-accent transition-colors">Blog</a> <a href="#beneficios" class="text-sm font-medium hover:text-brand-accent transition-colors">Nosotros</a> <a href="#contacto" class="text-sm font-medium hover:text-brand-accent transition-colors">Contacto</a>
+      </nav><!-- Icons -->
+      <div class="flex items-center gap-3">
+       <button id="searchBtn" class="p-2 hover:text-brand-accent transition-colors" aria-label="Buscar"> <i data-lucide="search" class="w-5 h-5"></i> </button> <button id="cartBtn" class="p-2 hover:text-brand-accent transition-colors relative" aria-label="Carrito"> <i data-lucide="shopping-bag" class="w-5 h-5"></i> <span id="cartCount" class="absolute -top-0.5 -right-0.5 bg-brand-accent text-white text-xs w-4 h-4 rounded-full flex items-center justify-center hidden">0</span> </button>
+      </div>
+     </div>
+    </div>
+   </header><!-- Mobile Menu -->
+   <div id="mobileMenu" class="mobile-menu fixed inset-0 z-[60] bg-brand-light">
+    <div class="flex items-center justify-between p-4 border-b">
+     <span class="font-serif text-2xl font-bold text-brand-dark">AgroDistribuidores del Caribe</span> <button id="closeMenu" class="p-2" aria-label="Cerrar"><i data-lucide="x" class="w-6 h-6"></i></button>
+    </div>
+    <nav class="flex flex-col p-6 gap-6">
+     <button onclick="scrollToHome()" class="text-lg font-medium text-left">Inicio</button> <a href="#productos" class="text-lg font-medium" onclick="closeMobileMenu()">Tienda</a> <a href="#categorias" class="text-lg font-medium" onclick="closeMobileMenu()">Categorías</a> <a href="#galeria" class="text-lg font-medium" onclick="closeMobileMenu()">Momentos</a> <a href="#blog" class="text-lg font-medium" onclick="closeMobileMenu()">Blog</a> <a href="#beneficios" class="text-lg font-medium" onclick="closeMobileMenu()">Nosotros</a> <a href="#contacto" class="text-lg font-medium" onclick="closeMobileMenu()">Contacto</a>
+    </nav>
+   </div><!-- HERO SLIDER -->
+   <section class="relative w-full" style="height: 85%;">
+    <div class="relative w-full h-full overflow-hidden">
+     <div class="slide active" style="background: linear-gradient(135deg, #993300 0%, #E8F1DC 50%, #D4E5C4 100%);"><img id="heroSlide1Img" src="https://i.ibb.co/27WVKLhV/IMG-20260502-WA0011.jpg?w=1200&amp;h=800&amp;fit=crop" alt="Productos frescos" class="absolute inset-0 w-full h-full object-cover" style="opacity: 0.2;" loading="lazy" onerror="this.style.display='none'">
+      <div class="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent"></div>
+      <div class="absolute inset-0 flex items-center">
+       <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full">
+        <div class="max-w-xl">
+         <p class="text-sm uppercase tracking-[0.3em] text-brand-accent mb-4 fade-in-up"><i data-lucide="leaf" class="w-4 h-4 inline mr-2"></i>Productos Frescos Locales</p>
+         <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6 fade-in-up delay-1 text-brand-dark" id="heroTitle">Directamente de la finca a tu mesa</h1>
+         <p class="text-gray-700 text-lg mb-8 fade-in-up delay-2" id="heroSubtitle">Tubérculos y carne de Cerdo de la más alta calidad, frescos cada día</p>
+         <div class="flex flex-wrap gap-4 fade-in-up delay-3">
+          <a href="#productos" class="btn-primary bg-brand-dark text-white px-8 py-3.5 text-sm font-medium uppercase tracking-wider">Ver Tienda</a> <a href="#categorias" class="btn-primary border-2 border-brand-dark text-brand-dark px-8 py-3.5 text-sm font-medium uppercase tracking-wider hover:bg-brand-dark hover:text-white">Categorías</a>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="slide" style="background: linear-gradient(135deg, #D4E5C4 0%, #C4D9B8 50%, #B8CEAA 100%);"><img id="heroSlide2Img" src="https://i.ibb.co/ycsWmsRJ/IMG-20260502-WA0012.jpg?w=1200&amp;h=800&amp;fit=crop" alt="Mayor y detal" class="absolute inset-0 w-full h-full object-cover" style="opacity: 0.3;" loading="lazy" onerror="this.style.display='none'">
+      <div class="absolute inset-0 bg-gradient-to-r from-transparent to-black/40"></div>
+      <div class="absolute inset-0 flex items-center justify-center text-center">
+       <div class="max-w-2xl px-6">
+        <p class="text-sm uppercase tracking-[0.3em] text-brand-accent mb-4"><i data-lucide="package" class="w-4 h-4 inline mr-2"></i>Mayor y Detal</p>
+        <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-brand-dark">Precios Especiales por Volumen</h1>
+        <p class="text-gray-700 text-lg mb-8">Calidad garantizada a los mejores precios</p><a href="#productos" class="btn-primary bg-brand-dark text-white px-8 py-3.5 text-sm font-medium uppercase tracking-wider inline-block">Conoce Nuestras Ofertas</a>
+       </div>
+      </div>
+     </div>
+     <div class="slide" style="background: linear-gradient(135deg, #E8F1DC 0%, #DDE8D0 50%, #D0DEC0 100%);"><img id="heroSlide3Img" src="https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=1200&amp;h=800&amp;fit=crop" alt="Envío rápido" class="absolute inset-0 w-full h-full object-cover" style="opacity: 0.3;" loading="lazy" onerror="this.style.display='none'">
+      <div class="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent"></div>
+      <div class="absolute inset-0 flex items-center">
+       <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full ml-auto">
+        <div class="max-w-xl ml-auto text-right">
+         <p class="text-sm uppercase tracking-[0.3em] text-brand-accent mb-4"><i data-lucide="truck" class="w-4 h-4 inline mr-2"></i>Envío Rápido</p>
+         <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-brand-dark">Entrega en 24-48 horas</h1>
+         <p class="text-gray-700 text-lg mb-8">A toda Cartagena de Indias</p><a href="#productos" class="btn-primary bg-brand-accent text-white px-8 py-3.5 text-sm font-medium uppercase tracking-wider inline-block">Compra Ahora</a>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div><!-- Slider dots -->
+    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+     <button class="slider-dot w-3 h-3 rounded-full bg-brand-dark/80 transition-all" data-slide="0"></button> <button class="slider-dot w-3 h-3 rounded-full bg-brand-dark/30 transition-all" data-slide="1"></button> <button class="slider-dot w-3 h-3 rounded-full bg-brand-dark/30 transition-all" data-slide="2"></button>
+    </div>
+   </section><!-- PROMO BANNER -->
+   <section class="bg-brand-dark text-white py-4 scroll-reveal">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-center">
+     <div class="flex items-center gap-2">
+      <i data-lucide="leaf" class="w-5 h-5 text-brand-accent"></i> <span class="text-sm" id="promoText">Entrega rápida en toda Cartagena — Productos 100% frescos</span>
+     </div>
+     <div class="hidden sm:block w-px h-5 bg-brand-dark/30"></div>
+     <div class="flex items-center gap-2">
+      <i data-lucide="package" class="w-5 h-5 text-brand-accent"></i> <span class="text-sm">Mayor y detal disponible</span>
+     </div>
+    </div>
+   </section><!-- CATEGORIES -->
+   <section id="categorias" class="py-16 lg:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="text-center mb-12 scroll-reveal">
+      <h2 class="font-serif text-3xl lg:text-4xl font-bold text-brand-dark mb-3">Categorías</h2>
+      <p class="text-gray-500">Productos frescos de la mejor calidad</p>
+     </div>
+     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto"><a href="#productos" class="category-card relative overflow-hidden rounded-xl cursor-pointer scroll-reveal aspect-square" style="background: linear-gradient(to bottom, #E8F1DC, #C4D9B8);">
+       <div class="category-img absolute inset-0"></div>
+       <div class="absolute inset-0 flex flex-col items-center justify-center">
+        <i data-lucide="carrot" class="w-16 h-16 text-brand-dark/30 mb-3"></i> <span class="font-serif text-2xl font-semibold text-brand-dark">Tubérculos</span>
+       </div>
+       <div class="category-overlay absolute inset-0 bg-brand-dark/50 flex items-center justify-center">
+        <span class="text-white text-sm font-medium uppercase tracking-wider border border-white px-4 py-2">Ver productos</span>
+       </div></a> <a href="#productos" class="category-card relative overflow-hidden rounded-xl cursor-pointer scroll-reveal delay-1 aspect-square" style="background: linear-gradient(to bottom, #D4E5C4, #B8CEAA);">
+       <div class="category-img absolute inset-0"></div>
+       <div class="absolute inset-0 flex flex-col items-center justify-center">
+        <i data-lucide="beef" class="w-16 h-16 text-brand-dark/30 mb-3"></i> <span class="font-serif text-2xl font-semibold text-brand-dark">Cárnicos</span>
+       </div>
+       <div class="category-overlay absolute inset-0 bg-brand-dark/50 flex items-center justify-center">
+        <span class="text-white text-sm font-medium uppercase tracking-wider border border-white px-4 py-2">Ver productos</span>
+       </div></a>
+     </div>
+    </div>
+   </section><!-- PRODUCTS -->
+   <section id="productos" class="py-16 lg:py-24 bg-brand-cream">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="text-center mb-12 scroll-reveal">
+      <h2 class="font-serif text-3xl lg:text-4xl font-bold text-brand-dark mb-3">Nuestros Productos</h2>
+      <p class="text-gray-500">Frescos y con la mejor calidad</p>
+     </div>
+     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6" id="productGrid">
+     </div>
+    </div>
+   </section><!-- GALLERY -->
+   <section id="galeria" class="py-16 lg:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="text-center mb-12 scroll-reveal">
+      <h2 class="font-serif text-3xl lg:text-4xl font-bold text-brand-dark mb-3" id="gallery-title">Momentos Destacados de la Cosecha</h2>
+      <p class="text-gray-500">Fotos y momentos de nuestros productos frescos</p>
+     </div>
+     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" id="galleryPreview">
+      <!-- Preview: 3 items only -->
+     </div>
+     <div class="text-center"><button onclick="openFullGallery()" class="inline-flex items-center gap-2 bg-brand-dark text-white px-8 py-3.5 text-sm font-medium uppercase tracking-wider btn-primary rounded-lg"> <i data-lucide="images" class="w-5 h-5"></i> Ver más de nuestros proyectos agrícolas </button>
+     </div>
+    </div>
+   </section><!-- BLOG -->
+   <section id="blog" class="py-16 lg:py-24 bg-brand-cream">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="text-center mb-12 scroll-reveal">
+      <h2 class="font-serif text-3xl lg:text-4xl font-bold text-brand-dark mb-3">Blog Agrícola</h2>
+      <p class="text-gray-500">Consejos y artículos sobre cultivo y distribución</p>
+     </div>
+     <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="blogGrid">
+      <!-- Blog posts will render here -->
+     </div>
+    </div>
+   </section><!-- TESTIMONIALS -->
+   <section class="py-16 lg:py-24 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+     <div class="scroll-reveal">
+      <h2 class="font-serif text-3xl lg:text-4xl font-bold mb-12 text-brand-dark">Lo que dicen nuestros clientes</h2>
+     </div>
+     <div class="relative min-h-[200px]" id="testimonialContainer">
+      <div class="testimonial-slide active">
+       <div class="flex justify-center mb-4">
+        <i data-lucide="star" class="w-5 h-5 text-brand-accent fill-current"></i> <i data-lucide="star" class="w-5 h-5 text-brand-accent fill-current"></i> <i data-lucide="star" class="w-5 h-5 text-brand-accent fill-current"></i> <i data-lucide="star" class="w-5 h-5 text-brand-accent fill-current"></i> <i data-lucide="star" class="w-5 h-5 text-brand-accent fill-current"></i>
+       </div>
+       <p class="text-lg italic text-gray-600 mb-6">"Los productos son increíblemente frescos. La yuca y el plátano siempre llegan en perfecto estado. ¡Lo mejor de la región!"</p>
+       <p class="font-semibold text-brand-dark">— Carlos M., Restaurante La Cabaña</p>
+      </div>
+      <div class="testimonial-slide">
+       <div class="flex justify-center mb-4">
+        <i data-lucide="star" class="w-5 h-5 text-brand-accent fill-current"></i> <i data-lucide="star" class="w-5 h-5 text-brand-accent fill-current"></i> <i data-lucide="star" class="w-5 h-5 text-brand-accent fill-current"></i> <i data-lucide="star" class="w-5 h-5 text-brand-accent fill-current"></i> <i data-lucide="star" class="w-5 h-5 text-brand-accent fill-current"></i>
+       </div>
+       <p class="text-lg italic text-gray-600 mb-6">"Excelente atención por WhatsApp y los precios de mayoreo son muy competitivos. Recomendado 100%."</p>
+       <p class="font-semibold text-brand-dark">— María López, Mercadista</p>
+      </div>
+      <div class="testimonial-slide">
+       <div class="flex justify-center mb-4">
+        <i data-lucide="star" class="w-5 h-5 text-brand-accent fill-current"></i> <i data-lucide="star" class="w-5 h-5 text-brand-accent fill-current"></i> <i data-lucide="star" class="w-5 h-5 text-brand-accent fill-current"></i> <i data-lucide="star" class="w-5 h-5 text-brand-accent fill-current"></i> <i data-lucide="star" class="w-5 h-5 text-brand-accent fill-current"></i>
+       </div>
+       <p class="text-lg italic text-gray-600 mb-6">"La carne de cerdo es de excelente calidad y el ñame siempre fresco. Confío en Agrodistribuidores del Caribe."</p>
+       <p class="font-semibold text-brand-dark">— Juan Rodríguez, Carnicería Central</p>
+      </div>
+     </div>
+     <div class="flex justify-center gap-2 mt-8">
+      <button class="test-dot w-2.5 h-2.5 rounded-full bg-brand-accent" data-test="0"></button> <button class="test-dot w-2.5 h-2.5 rounded-full bg-gray-300" data-test="1"></button> <button class="test-dot w-2.5 h-2.5 rounded-full bg-gray-300" data-test="2"></button>
+     </div>
+    </div>
+   </section><!-- BENEFITS -->
+   <section id="beneficios" class="py-16 lg:py-20 bg-brand-light">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+      <div class="scroll-reveal">
+       <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-white flex items-center justify-center shadow-sm">
+        <i data-lucide="truck" class="w-6 h-6 text-brand-accent"></i>
+       </div>
+       <h3 class="font-semibold mb-2 text-brand-dark">Entrega a Todo el Cartagena</h3>
+       <p class="text-sm text-gray-500">Recibe tu pedido en 24-48 horas hábiles</p>
+      </div>
+      <div class="scroll-reveal delay-1">
+       <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-white flex items-center justify-center shadow-sm">
+        <i data-lucide="message-circle" class="w-6 h-6 text-brand-accent"></i>
+       </div>
+       <h3 class="font-semibold mb-2 text-brand-dark">Atención por WhatsApp</h3>
+       <p class="text-sm text-gray-500">Consultas rápidas y personalizadas</p>
+      </div>
+      <div class="scroll-reveal delay-2">
+       <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-white flex items-center justify-center shadow-sm">
+        <i data-lucide="leaf" class="w-6 h-6 text-brand-accent"></i>
+       </div>
+       <h3 class="font-semibold mb-2 text-brand-dark">100% Frescos</h3>
+       <p class="text-sm text-gray-500">Directamente de la finca local</p>
+      </div>
+     </div>
+    </div>
+   </section><!-- FOOTER -->
+   <footer id="contacto" class="bg-brand-dark text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+      <div>
+       <h3 class="font-serif text-2xl font-bold mb-4">Agrodistribuidores del Caribe</h3>
+       <p class="text-gray-300 text-sm leading-relaxed">Distribuidores de productos frescos de la más alta calidad. Tubérculos y carne de cerdo directamente de la finca a tu puerta.</p>
+      </div>
+      <div>
+       <h4 class="font-semibold mb-4 text-brand-accent">Información</h4>
+       <ul class="space-y-2 text-sm text-gray-300">
+        <li><button onclick="openInfoModal('shipping')" class="hover:text-brand-accent transition-colors text-left">Envíos y entregas</button></li>
+        <li><button onclick="openInfoModal('wholesale')" class="hover:text-brand-accent transition-colors text-left">Precios mayoreo</button></li>
+        <li><button onclick="openInfoModal('conditions')" class="hover:text-brand-accent transition-colors text-left">Condiciones</button></li>
+        <li><button onclick="openInfoModal('faq')" class="hover:text-brand-accent transition-colors text-left">Preguntas frecuentes</button></li>
+       </ul>
+      </div>
+      <div>
+       <h4 class="font-semibold mb-4 text-brand-accent">Contacto</h4>
+       <ul class="space-y-2 text-sm text-gray-300">
+        <li class="flex items-center gap-2"><i data-lucide="message-circle" class="w-4 h-4"></i> WhatsApp: <span id="footer-whatsapp">+57 312 798 2201</span></li>
+        <li class="flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4"></i> Llamadas: <span id="footer-phone">+57 312 798 2201</span></li>
+        <li class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4"></i> Cartagena de Indias</li>
+       </ul>
+       <div class="mt-6 flex gap-4">
+        <a href="https://www.facebook.com/people/Agrodistribuidores-del-Caribe/61576966378852/#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-white/10 hover:bg-brand-accent transition-colors flex items-center justify-center" aria-label="Facebook"> <i data-lucide="facebook" class="w-5 h-5"></i> </a> <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-white/10 hover:bg-brand-accent transition-colors flex items-center justify-center" aria-label="Instagram"> <i data-lucide="instagram" class="w-5 h-5"></i> </a> <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-white/10 hover:bg-brand-accent transition-colors flex items-center justify-center" aria-label="Twitter"> <i data-lucide="twitter" class="w-5 h-5"></i> </a> <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-white/10 hover:bg-brand-accent transition-colors flex items-center justify-center" aria-label="TikTok"> <i data-lucide="music" class="w-5 h-5"></i> </a>
+       </div>
+      </div>
+     </div>
+     <div class="border-t border-white/10 pt-8 text-center text-sm text-gray-400">
+      <p>© 2024 Agrodistribuidores del Caribe. Todos los derechos reservados.Diseño Exclusivo realizado BY AnyeliGa</p>
+      <p>  ¿Necesitas una LandingPage?
+        </p>
+        <p>
+        Shop
+        <a href="https://wa.me/573127982201?text=Hola,%20vi%20una%20landing%20que%20hiciste%20y%20quiero%20información" target="_blank">
+        Aqui
+        </a>
+        </p>
+     </div>
+    </div>
+   </footer><!-- CART SIDEBAR -->
+   <div id="cartSidebar" class="fixed inset-0 z-[70] pointer-events-none">
+    <div id="cartBackdrop" class="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300"></div>
+    <div id="cartPanel" class="absolute top-0 right-0 h-full w-full max-w-md bg-white transform translate-x-full transition-transform duration-300 pointer-events-auto">
+     <div class="flex items-center justify-between p-6 border-b">
+      <h3 class="font-serif text-xl font-bold text-brand-dark">Tu Pedido</h3><button id="closeCart" class="p-2"><i data-lucide="x" class="w-5 h-5"></i></button>
+     </div>
+     <div id="cartItems" class="p-6 flex-1 overflow-y-auto" style="max-height: 60%;">
+      <p class="text-gray-400 text-center py-12">Tu pedido está vacío</p>
+     </div>
+     <div class="p-6 border-t">
+      <div class="flex justify-between mb-4">
+       <span class="font-semibold text-brand-dark">Total:</span> <span class="font-semibold text-brand-dark" id="cartTotal">$0</span>
+      </div><button id="checkoutBtn" class="w-full bg-brand-dark text-white py-3.5 font-medium uppercase tracking-wider btn-primary rounded-lg">Enviar por WhatsApp</button>
+     </div>
+    </div>
+   </div><!-- FULL GALLERY MODAL -->
+   <div id="fullGalleryModal" class="fixed inset-0 z-[85] bg-black/95 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 overflow-auto">
+    <div class="p-4 sm:p-6">
+     <div class="flex items-center justify-between mb-6">
+      <h2 class="font-serif text-2xl sm:text-3xl font-bold text-white">Galería de Productos</h2><button onclick="closeFullGallery()" class="p-2 hover:bg-white/10 rounded-lg transition-colors"> <i data-lucide="x" class="w-6 h-6 text-white"></i> </button>
+     </div>
+     <div id="galleryGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+     </div>
+    </div>
+   </div><!-- GALLERY MODAL -->
+   <div id="galleryModal" class="fixed inset-0 z-[90] bg-black/95 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 flex flex-col"><!-- Header -->
+    <div class="flex items-center justify-between p-4 sm:p-6 border-b border-white/10">
+     <h2 class="font-serif text-xl sm:text-2xl font-bold text-white" id="galleryModalTitle">Título de la foto</h2><button onclick="closeGalleryModal()" class="p-2 hover:bg-white/10 rounded-lg transition-colors"><i data-lucide="x" class="w-6 h-6 text-white"></i></button>
+    </div><!-- Main content -->
+    <div class="flex-1 flex flex-col lg:flex-row gap-6 p-4 sm:p-6 overflow-hidden"><!-- Image area -->
+     <div class="flex-1 flex items-center justify-center rounded-lg overflow-hidden bg-black">
+      <div id="galleryModalImage" class="w-full h-full flex items-center justify-center">
+      </div>
+     </div><!-- Info panel -->
+     <div class="lg:w-96 flex flex-col justify-between">
+      <div>
+       <p class="text-brand-accent font-semibold text-sm mb-4" id="galleryCounter">1 / 10</p>
+       <h3 class="font-serif text-2xl font-bold text-white mb-4" id="galleryModalTitle">Título</h3>
+       <p class="text-gray-300 text-base leading-relaxed" id="galleryModalDesc">Descripción de la foto</p>
+      </div><!-- Navigation -->
+      <div class="flex gap-4 mt-8"><button id="galleryPrev" onclick="prevGalleryPhoto()" class="flex-1 flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white py-3 rounded-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed"> <i data-lucide="chevron-left" class="w-5 h-5"></i> <span class="hidden sm:inline">Anterior</span> </button> <button id="galleryNext" onclick="nextGalleryPhoto()" class="flex-1 flex items-center justify-center gap-2 bg-brand-accent hover:bg-brand-accent/90 text-white py-3 rounded-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed"> <span class="hidden sm:inline">Siguiente</span> <i data-lucide="chevron-right" class="w-5 h-5"></i> </button>
+      </div>
+     </div>
+    </div>
+   </div><!-- QUICK VIEW MODAL -->
+   <div id="quickViewModal" class="modal-backdrop fixed inset-0 z-[80] flex items-center justify-center p-4 bg-black/50">
+    <div class="modal-content bg-white rounded-2xl max-w-lg w-full max-h-[90%] overflow-y-auto p-6 relative">
+     <button id="closeModal" class="absolute top-4 right-4 p-2"><i data-lucide="x" class="w-5 h-5"></i></button>
+     <div id="modalContent"></div>
+    </div>
+   </div><!-- SEARCH OVERLAY -->
+   <div id="searchOverlay" class="fixed inset-0 z-[75] bg-white flex flex-col opacity-0 pointer-events-none transition-opacity duration-300 overflow-hidden">
+    <!-- Header búsqueda -->
+    <div class="bg-brand-dark text-white p-4 flex items-center gap-3 border-b">
+     <i data-lucide="search" class="w-5 h-5"></i> <input id="searchInput" type="text" placeholder="Buscar productos..." class="flex-1 text-base outline-none bg-transparent font-sans text-white placeholder-white/50"> <button id="closeSearch" class="p-2 hover:bg-white/10 rounded"><i data-lucide="x" class="w-5 h-5"></i></button>
+    </div><!-- Filtros -->
+    <div class="bg-brand-light border-b p-4 flex gap-3 overflow-x-auto">
+     <button class="filter-btn px-4 py-1.5 rounded-full text-sm whitespace-nowrap bg-white border border-brand-dark text-brand-dark font-medium" data-filter="all">Todos</button> <button class="filter-btn px-4 py-1.5 rounded-full text-sm whitespace-nowrap bg-white border border-gray-300 text-gray-700" data-filter="Tubérculos">Tubérculos</button> <button class="filter-btn px-4 py-1.5 rounded-full text-sm whitespace-nowrap bg-white border border-gray-300 text-gray-700" data-filter="Cárnicos">Cárnicos</button>
+    </div><!-- Resultados -->
+    <div class="flex-1 overflow-y-auto p-4">
+     <div id="searchResults" class="space-y-3"></div>
+    </div>
+   </div>
+  </div>
+  <script>
+// INFORMACIÓN - EDITA AQUÍ LOS TEXTOS DE ENVIOS, MAYOREO, CONDICIONES Y PREGUNTAS FRECUENTES
+const infoSections = {
+  shipping: {
+    title: 'Envíos y Entregas',
+    icon: 'truck',
+    content: `
+      <h3 class="font-serif text-xl font-bold text-brand-dark mb-4">Política de Envíos</h3>
+      <div class="space-y-4 text-gray-700">
+        <div>
+          <h4 class="font-semibold text-brand-dark mb-2">🚗 Cartagena - Entrega Contraentrega</h4>
+          <p class="text-sm mb-2">Disponemos de envíos contraentrega exclusivamente en la ciudad de Cartagena.</p>
+          <ul class="text-sm space-y-1 ml-4 list-disc">
+            <li><strong>Tiempo de entrega:</strong> 6 a 8 horas (dependiendo de la demanda y producto)</li>
+            <li><strong>Método de pago:</strong> Contraentrega (efectivo o tarjeta)</li>
+            <li><strong>Costo:</strong> Consultar según zona</li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-brand-dark mb-2">🏘️ Municipios Aledaños</h4>
+          <p class="text-sm mb-2">Para municipios cercanos a Cartagena ofrecemos entregas con tiempos extendidos pago anticipado.</p>
+          <ul class="text-sm space-y-1 ml-4 list-disc">
+            <li><strong>Tiempo de entrega:</strong> Hasta 12-24 horas hábiles</li>
+            <li><strong>Método:</strong> Coordinación telefónica/WhatsApp</li>
+            <li><strong>Costo:</strong> A pactar según distancia</li>
+          </ul>
+        </div>
+        <div class="bg-brand-light p-4 rounded-lg mt-4">
+          <h4 class="font-semibold text-brand-dark mb-2">📞 Tiempo de Respuesta</h4>
+          <ul class="text-sm space-y-1 ml-4 list-disc">
+            <li>Respuesta garantizada en <strong>máximo 24 horas</strong></li>
+            <li>Consultas por WhatsApp atendidas lo más pronto posible</li>
+          </ul>
+        </div>
+      </div>
+    `
+  },
+  wholesale: {
+    title: 'Precios Al Mayor',
+    icon: 'tag',
+    content: `
+      <h3 class="font-serif text-xl font-bold text-brand-dark mb-4">Descuentos por Volumen</h3>
+      <div class="space-y-4 text-gray-700">
+        <div class="bg-brand-cream p-4 rounded-lg">
+          <h4 class="font-semibold text-brand-dark mb-3">Tubérculos</h4>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between">
+              <span>Yuca/Ñame (al detal):</span>
+              <strong>$3.000 por kilo y $2.500 desde 2 kilos en adelante</strong>
+            </div>
+            <div class="flex justify-between">
+              <span>Bultos (9 bultos+):</span>
+              <strong>Consultar precio especial</strong>
+            </div>
+            <div class="flex justify-between">
+              <span>Plátanos (mano):</span>
+              <strong>Desde $3.000</strong>
+            </div>
+          </div>
+        </div>
+        <div class="bg-brand-light p-4 rounded-lg">
+          <h4 class="font-semibold text-brand-dark mb-3">Productos Cárnicos</h4>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between">
+              <span>Todos los cortes de cerdo:</span>
+              <strong>$18.000 por kilo</strong>
+            </div>
+            <div class="flex justify-between">
+              <span>Promocion en todos los cortes:</span>
+              <strong>Descuento disponible</strong>
+            </div>
+            <div class="flex justify-between">
+              <span>Compra de 15+ kilos:</span>
+              <strong>Precio preferencial</strong>
+            </div>
+          </div>
+        </div>
+        <p class="text-sm text-gray-600 mt-4 italic">Para cotizaciones especiales y precios por volumen, contáctanos por WhatsApp con la cantidad que requieres.</p>
+      </div>
+    `
+  },
+  conditions: {
+    title: 'Condiciones de Compra',
+    icon: 'file-text',
+    content: `
+      <h3 class="font-serif text-xl font-bold text-brand-dark mb-4">Términos y Condiciones</h3>
+      <div class="space-y-4 text-gray-700 text-sm">
+        <div>
+          <h4 class="font-semibold text-brand-dark mb-2">Método de Pago</h4>
+          <ul class="space-y-1 ml-4 list-disc">
+            <li>Contraentrega (efectivo o ) en Cartagena</li>
+            <li>Transferencia bancaria para órdenes anticipadas</li>
+            <li>billetera digital</li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-brand-dark mb-2">Política de Devoluciones</h4>
+          <ul class="space-y-1 ml-4 list-disc">
+            <li>Los productos se entregan frescos y en perfecto estado</li>
+            <li>Inspecciona tu pedido al recibirlo</li>
+            <li>Reporta cualquier inconveniente dentro de 2 horas de recibido</li>
+            <li>Nos encargaremos de resolver tu caso de inmediato</li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-brand-dark mb-2">Garantía de Frescura</h4>
+          <ul class="space-y-1 ml-4 list-disc">
+            <li>Todos nuestros productos salen frescos de la finca</li>
+            <li>Almacenamiento y transporte en óptimas condiciones</li>
+            <li>Máxima durabilidad en tu hogar si sigues nuestras recomendaciones</li>
+          </ul>
+        </div>
+        <div class="bg-brand-light p-3 rounded-lg mt-4">
+          <h4 class="font-semibold text-brand-dark mb-2">Pedidos Especiales</h4>
+          <p>¿Necesitas una cantidad específica o producto especial? Contáctanos con anticipación (mínimo 24-48 horas) para asegurar disponibilidad.</p>
+        </div>
+      </div>
+    `
+  },
+  faq: {
+    title: 'Preguntas Frecuentes',
+    icon: 'help-circle',
+    content: `
+      <h3 class="font-serif text-xl font-bold text-brand-dark mb-4">Preguntas Frecuentes</h3>
+      <div class="space-y-4 text-sm text-gray-700">
+        <div class="border-l-4 border-brand-accent pl-4">
+          <h4 class="font-semibold text-brand-dark mb-1">¿Cómo hago un pedido?</h4>
+          <p>Puedes hacer tu pedido de dos formas: 1) Usa nuestra tienda en línea y agrega los productos al carrito, luego envía por WhatsApp. 2) Contáctanos directamente por WhatsApp con la lista de productos que deseas.</p>
+        </div>
+        <div class="border-l-4 border-brand-accent pl-4">
+          <h4 class="font-semibold text-brand-dark mb-1">¿Cuál es el tiempo de respuesta?</h4>
+          <p>Respondemos en máximo 24 horas a través de WhatsApp. Procuramos atender mucho más rápido según nuestra disponibilidad.</p>
+        </div>
+        <div class="border-l-4 border-brand-accent pl-4">
+          <h4 class="font-semibold text-brand-dark mb-1">¿Hacen entregas a otros municipios?</h4>
+          <p>Sí, llegamos a municipios aledaños a Cartagena con entregas de hasta 48 horas. Consulta disponibilidad para tu zona.</p>
+        </div>
+        <div class="border-l-4 border-brand-accent pl-4">
+          <h4 class="font-semibold text-brand-dark mb-1">¿Es contraentrega?</h4>
+          <p>En Cartagena ofrecemos contraentrega (efectivo o tarjeta). Para otras zonas se coordina según acuerdo entre ambas partes, el valor del domicilio sera cancelado por el cliente.</p>
+        </div>
+        <div class="border-l-4 border-brand-accent pl-4">
+          <h4 class="font-semibold text-brand-dark mb-1">¿Cuánto tiempo duran frescos los productos?</h4>
+          <p>Nuestros productos llegan frescos del día. Si los almacenas correctamente (lugar fresco, seco y oscuro), duran hasta 2-3 semanas.</p>
+        </div>
+        <div class="border-l-4 border-brand-accent pl-4">
+          <h4 class="font-semibold text-brand-dark mb-1">¿Tienen descuentos por volumen?</h4>
+          <p>Sí, contamos con precios especiales para compras al mayor. Cuanto mayor sea tu volumen, mejores precios conseguirás. ¡Pregunta!</p>
+        </div>
+        <div class="border-l-4 border-brand-accent pl-4">
+          <h4 class="font-semibold text-brand-dark mb-1">¿Puedo hacer pedidos personalizados?</h4>
+          <p>Claro, contáctanos con tiempo (24-48 horas antes) con tu solicitud especial y nos encargaremos de preparar exactamente lo que necesitas.</p>
+        </div>
+      </div>
+    `
+  }
+};
+
+function openInfoModal(type) {
+  const section = infoSections[type];
+  if (!section) return;
+  
+  document.getElementById('modalContent').innerHTML = `
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-12 h-12 rounded-full bg-brand-accent/20 flex items-center justify-center">
+        <i data-lucide="${section.icon}" class="w-6 h-6 text-brand-accent"></i>
+      </div>
+      <h2 class="font-serif text-2xl font-bold text-brand-dark">${section.title}</h2>
+    </div>
+    ${section.content}
+  `;
+  document.getElementById('quickViewModal').classList.add('open');
+  lucide.createIcons();
+}
+
+const tuberculosProducts = [
+  { id: 1, name: 'Plátano Verde', price: 1000, unit: 'und', category: 'Tubérculos', color: 'from-yellow-100 to-yellow-200', detail: 'Fresco y de alta calidad', image: 'https://i.ibb.co/TxHQHqcw/IMG-20260502-WA0015.jpg?w=500&h=500&fit=crop' }, // IMAGEN 1: Cambiar URL aquí
+  { id: 2, name: 'Plátano Pochocho', price: 3000, unit: 'la mano', category: 'Tubérculos', color: 'from-orange-100 to-yellow-100', detail: 'Mano de plátanos frescos', image: 'https://i.ibb.co/mFtzkMsW/IMG-20260502-WA0010.jpg?w=500&h=500&fit=crop' }, // IMAGEN 2: Cambiar URL aquí
+  { id: 3, name: 'Ñame Diamante Bulto', price: 100000, unit: 'bulto', category: 'Tubérculos', color: 'from-amber-100 to-orange-100', detail: 'Ñame fresco por bulto', image: 'https://i.ibb.co/5gmBV4L3/IMG-20260502-WA0017.jpg?w=500&h=500&fit=crop' }, // IMAGEN 3: Cambiar URL aquí
+  { id: 4, name: 'Yuca Bulto', price: 90000, unit: 'bulto', category: 'Tubérculos', color: 'from-yellow-50 to-amber-100', detail: 'Yuca fresca en bulto', image: 'https://i.ibb.co/RL6NVv4/IMG-20260502-WA0013.jpg?w=500&h=500&fit=crop' }, // IMAGEN 4: Cambiar URL aquí
+  { id: 5, name: 'Yuca al Detal', price: 3000, unit: 'kilo', category: 'Tubérculos', color: 'from-amber-50 to-yellow-100', detail: '3 mil por kilo (2+ kilos: $2.500)', image: 'https://i.ibb.co/fzB1ggjb/IMG-20260502-WA0020.jpg?w=500&h=500&fit=crop' }, // IMAGEN 5: Cambiar URL aquí
+  { id: 6, name: 'Ñame al Detal', price: 3000, unit: 'kilo', category: 'Tubérculos', color: 'from-orange-50 to-amber-100', detail: '3 mil por kilo (2+ kilos: $2.500)', image: 'https://i.ibb.co/n8mj06d8/IMG-20260502-WA0018.jpg?w=500&h=500&fit=crop' } // IMAGEN 6: Cambiar URL aquí
+];
+
+// Productos Cárnicos - CAMBIAR LAS IMÁGENES AQUÍ
+const carnicos = [
+  { id: 7, name: 'Lomo de Cerdo', price: 18000, unit: 'kilo', category: 'Cárnicos', color: 'from-red-100 to-pink-100', detail: 'Cerdo fresco por kilo', image: 'https://i.ibb.co/DfQqCxSp/Whats-App-Image-2026-05-04-at-5-09-43-PM-1.jpg?w=500&h=500&fit=crop' }, // IMAGEN 7: Cambiar URL aquí
+  { id: 8, name: 'Costillas de Cerdo', price: 18000, unit: 'kilo', category: 'Cárnicos', color: 'from-red-100 to-rose-100', detail: 'Costillas frescas por kilo', image: 'https://i.ibb.co/ksFghNBF/Whats-App-Image-2026-05-04-at-5-10-53-PM.jpg?w=500&h=500&fit=crop' }, // IMAGEN 8: Cambiar URL aquí
+  { id: 9, name: 'Pierna de Cerdo', price: 18000, unit: 'kilo', category: 'Cárnicos', color: 'from-red-200 to-pink-100', detail: 'Pierna fresca por kilo', image: 'https://i.ibb.co/8ghpbCyP/Whats-App-Image-2026-05-04-at-5-14-56-PM.jpg?w=500&h=500&fit=crop' }, // IMAGEN 9: Cambiar URL aquí
+  { id: 10, name: 'Paleta (Espaldilla) de Cerdo', price: 18000, unit: 'kilo', category: 'Cárnicos', color: 'from-orange-100 to-red-100', detail: 'Paleta fresca por kilo', image: 'https://i.ibb.co/CsQ17YH3/Whats-App-Image-2026-05-04-at-5-16-21-PM.jpg?w=500&h=500&fit=crop' }, // IMAGEN 10: Cambiar URL aquí
+  { id: 11, name: 'Panceta/Tocino (Barriga)', price: 18000, unit: 'kilo', category: 'Cárnicos', color: 'from-red-50 to-orange-100', detail: 'Panceta fresca por kilo', image: 'https://i.ibb.co/nqXxcX7Y/Whats-App-Image-2026-05-04-at-5-18-52-PM-1.jpg?w=500&h=500&fit=crop' }, // IMAGEN 11: Cambiar URL aquí
+  { id: 12, name: 'Chuletas de Cerdo', price: 18000, unit: 'kilo', category: 'Cárnicos', color: 'from-red-100 to-amber-100', detail: 'Chuletas frescas por kilo', image: 'https://i.ibb.co/WpRNbgHc/Whats-App-Image-2026-05-04-at-5-24-05-PM.jpg?w=500&h=500&fit=crop' }, // IMAGEN 12: Cambiar URL aquí
+  { id: 13, name: 'Patas de Cerdo', price: 18000, unit: 'kilo', category: 'Cárnicos', color: 'from-amber-100 to-orange-100', detail: 'Patas frescas por kilo', image: 'https://i.ibb.co/20vNfWFK/Whats-App-Image-2026-05-04-at-6-15-00-PM-1.jpg?w=500&h=500&fit=crop' }, // IMAGEN 13: Cambiar URL aquí
+  { id: 14, name: 'Otros Cortes de Cerdo', price: 18000, unit: 'kilo', category: 'Cárnicos', color: 'from-red-100 to-orange-100', detail: 'Diferentes cortes frescos', image: 'https://i.ibb.co/ymrtP9h6/Whats-App-Image-2026-05-04-at-6-17-37-PM.jpg?w=500&h=500&fit=crop' } // IMAGEN 14: Cambiar URL aquí
+];
+
+const products = [...tuberculosProducts, ...carnicos];
+let cart = [];
+let whatsappNumber = '573127982201';
+let currentSearchFilter = 'all';
+
+// Config
+const defaultConfig = {
+  brand_name: 'AgroDistribuidores del Caribe',
+  hero_title: 'Directamente de la finca a tu mesa',
+  hero_subtitle: 'Tubérculos y carne de Cerdo de la más alta calidad, frescos cada día',
+  promo_text: 'Entrega rápida en toda Cartagena — Productos 100% frescos',
+  whatsapp_number: '+57 312 798 2201',
+  gallery_title: 'Momentos destacados de Nuestra Cosecha Productos',
+  hero_slide_1_image: 'https://images.unsplash.com/photo-1488459716781-6f3ee409e8f5?w=1200&h=800&fit=crop',
+  hero_slide_2_image: 'https://images.unsplash.com/photo-1599599810694-b5ac4dd64b2c?w=1200&h=800&fit=crop',
+  hero_slide_3_image: 'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=1200&h=800&fit=crop',
+  background_color: '#F0F4E8',
+  surface_color: '#E8F1DC',
+  text_color: '#2D5016',
+  primary_action_color: '#2D5016',
+  secondary_action_color: '#6B9D3E',
+  font_family: 'Playfair Display',
+  font_size: 16
+};
+
+// Render products
+function renderProducts() {
+  const grid = document.getElementById('productGrid');
+  grid.innerHTML = products.map(p => `
+    <div class="product-card scroll-reveal bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
+      <div class="relative aspect-[3/4] overflow-hidden bg-gradient-to-br ${p.color} flex items-center justify-center">
+        <img src="${p.image}" alt="${p.name}" class="product-img w-full h-full object-cover" loading="lazy" onerror="this.style.display='none'">
+        <div class="product-actions absolute bottom-3 left-3 right-3 flex justify-center gap-2">
+          <button onclick="addToWishlist(${p.id})" class="w-9 h-9 rounded-full bg-white shadow flex items-center justify-center hover:bg-brand-accent hover:text-white transition-colors" aria-label="Wishlist">
+            <i data-lucide="heart" class="w-4 h-4"></i>
+          </button>
+          <button onclick="openQuickView(${p.id})" class="w-9 h-9 rounded-full bg-white shadow flex items-center justify-center hover:bg-brand-accent hover:text-white transition-colors" aria-label="Ver detalles">
+            <i data-lucide="eye" class="w-4 h-4"></i>
+          </button>
+          <button onclick="addToCart(${p.id})" class="w-9 h-9 rounded-full bg-white shadow flex items-center justify-center hover:bg-brand-accent hover:text-white transition-colors" aria-label="Agregar">
+            <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+      <div class="p-4">
+        <h3 class="text-sm font-medium mb-1 truncate text-brand-dark">${p.name}</h3>
+        <div class="flex items-center gap-2">
+          <span class="font-semibold text-sm text-brand-dark">$${p.price.toLocaleString()}</span>
+          <span class="text-xs text-gray-500">${p.unit}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  lucide.createIcons();
+  initScrollReveal();
+}
+
+// Cart
+function addToCart(id) {
+  const p = products.find(x => x.id === id);
+  const existing = cart.find(x => x.id === id);
+  if (existing) existing.qty++;
+  else cart.push({ ...p, qty: 1 });
+  updateCart();
+  openCart();
+  showToast(`${p.name} añadido al pedido`);
+}
+
+function updateCart() {
+  const countEl = document.getElementById('cartCount');
+  const total = cart.reduce((s, i) => s + i.qty, 0);
+  countEl.textContent = total;
+  countEl.classList.toggle('hidden', total === 0);
+  
+  const itemsEl = document.getElementById('cartItems');
+  if (cart.length === 0) {
+    itemsEl.innerHTML = '<p class="text-gray-400 text-center py-12">Tu pedido está vacío</p>';
+  } else {
+    itemsEl.innerHTML = cart.map(item => `
+      <div class="flex items-center gap-3 py-3 border-b">
+        <div class="w-14 h-14 rounded-lg bg-gradient-to-br ${item.color} flex-shrink-0"></div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-medium truncate text-brand-dark">${item.name}</p>
+          <p class="text-xs text-gray-500">Cant: ${item.qty} ${item.unit}</p>
+        </div>
+        <div class="text-right">
+          <p class="text-sm font-semibold text-brand-dark">$${(item.price * item.qty).toLocaleString()}</p>
+          <button onclick="removeFromCart(${item.id})" class="text-xs text-red-400 hover:text-red-600">Eliminar</button>
+        </div>
+      </div>
+    `).join('');
+  }
+  document.getElementById('cartTotal').textContent = '$' + cart.reduce((s, i) => s + i.price * i.qty, 0).toLocaleString();
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(x => x.id !== id);
+  updateCart();
+}
+
+function openCart() {
+  document.getElementById('cartPanel').style.transform = 'translateX(0)';
+  document.getElementById('cartBackdrop').style.opacity = '1';
+  document.getElementById('cartSidebar').style.pointerEvents = 'all';
+}
+
+function closeCartFn() {
+  document.getElementById('cartPanel').style.transform = 'translateX(100%)';
+  document.getElementById('cartBackdrop').style.opacity = '0';
+  document.getElementById('cartSidebar').style.pointerEvents = 'none';
+}
+
+// Quick view
+function openQuickView(id) {
+  const p = products.find(x => x.id === id);
+  document.getElementById('modalContent').innerHTML = `
+    <div class="aspect-square rounded-xl bg-gradient-to-br ${p.color} mb-4 overflow-hidden flex items-center justify-center">
+      <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover" loading="lazy" onerror="this.style.display='none'">
+    </div>
+    <h2 class="font-serif text-2xl font-bold mb-2 text-brand-dark">${p.name}</h2>
+    <p class="text-brand-accent text-sm mb-3">${p.category}</p>
+    <div class="flex items-center gap-3 mb-4">
+      <span class="text-2xl font-bold text-brand-dark">$${p.price.toLocaleString()}</span>
+      <span class="text-sm text-gray-500">por ${p.unit}</span>
+    </div>
+    <p class="text-gray-600 text-sm mb-6">${p.detail}</p>
+    <div class="flex flex-col gap-3">
+      <button onclick="addToCart(${p.id});document.getElementById('quickViewModal').classList.remove('open')" class="w-full bg-brand-dark text-white py-3 font-medium uppercase tracking-wider text-sm btn-primary rounded-lg">Agregar al Pedido</button>
+      <a href="https://wa.me/${whatsappNumber}?text=Hola! Me interesa: ${encodeURIComponent(p.name + ' - $' + p.price + ' por ' + p.unit)}" target="_blank" rel="noopener noreferrer" class="w-full bg-green-500 text-white py-3 font-medium text-sm btn-primary rounded-lg text-center">Comprar por WhatsApp</a>
+    </div>
+  `;
+  document.getElementById('quickViewModal').classList.add('open');
+  lucide.createIcons();
+}
+
+function addToWishlist(id) {
+  const p = products.find(x => x.id === id);
+  showToast(`${p.name} añadido a favoritos 💚`);
+}
+
+function showToast(msg) {
+  const toast = document.createElement('div');
+  toast.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 bg-brand-dark text-white px-6 py-3 rounded-lg shadow-lg z-[90] text-sm animate-[fadeInUp_0.3s_ease]';
+  toast.textContent = msg;
+  document.getElementById('app').appendChild(toast);
+  setTimeout(() => toast.remove(), 2500);
+}
+
+// Slider
+let currentSlide = 0;
+const slides = document.querySelectorAll('.slide');
+const sliderDots = document.querySelectorAll('.slider-dot');
+
+function goToSlide(n) {
+  slides[currentSlide].classList.remove('active');
+  sliderDots[currentSlide].style.opacity = '0.3';
+  currentSlide = n;
+  slides[currentSlide].classList.add('active');
+  sliderDots[currentSlide].style.opacity = '1';
+}
+
+sliderDots.forEach(dot => dot.addEventListener('click', () => goToSlide(parseInt(dot.dataset.slide))));
+setInterval(() => goToSlide((currentSlide + 1) % slides.length), 5000);
+
+// Testimonials
+let currentTest = 0;
+const testSlides = document.querySelectorAll('.testimonial-slide');
+const testDots = document.querySelectorAll('.test-dot');
+
+function goToTest(n) {
+  testSlides[currentTest].classList.remove('active');
+  testDots[currentTest].classList.replace('bg-brand-accent', 'bg-gray-300');
+  currentTest = n;
+  testSlides[currentTest].classList.add('active');
+  testDots[currentTest].classList.replace('bg-gray-300', 'bg-brand-accent');
+}
+
+testDots.forEach(dot => dot.addEventListener('click', () => goToTest(parseInt(dot.dataset.test))));
+setInterval(() => goToTest((currentTest + 1) % testSlides.length), 4000);
+
+// Scroll reveal
+function initScrollReveal() {
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.scroll-reveal:not(.visible)').forEach(el => observer.observe(el));
+}
+
+// Mobile menu
+function toggleMobileMenu() {
+  const menu = document.getElementById('mobileMenu');
+  menu.classList.toggle('open');
+}
+
+function closeMobileMenu() {
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+
+function scrollToHome() {
+  closeMobileMenu();
+  const app = document.getElementById('app');
+  app.scroll({ top: 0, behavior: 'smooth' });
+}
+
+document.getElementById('menuBtn').addEventListener('click', toggleMobileMenu);
+document.getElementById('closeMenu').addEventListener('click', closeMobileMenu);
+
+// Cerrar menú al hacer click en un enlace
+document.querySelectorAll('#mobileMenu a, #mobileMenu button').forEach(link => {
+  link.addEventListener('click', closeMobileMenu);
+});
+
+// Cart sidebar
+document.getElementById('cartBtn').addEventListener('click', openCart);
+document.getElementById('closeCart').addEventListener('click', closeCartFn);
+document.getElementById('cartBackdrop').addEventListener('click', closeCartFn);
+document.getElementById('checkoutBtn').addEventListener('click', () => {
+  if (cart.length === 0) return;
+  const msg = cart.map(i => `• ${i.name} x${i.qty} ${i.unit} - $${(i.price*i.qty).toLocaleString()}`).join('\n');
+  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent('¡Hola! Quiero hacer este pedido:\n\n' + msg + '\n\nTOTAL: $' + total.toLocaleString())}`, '_blank');
+  cart = [];
+  updateCart();
+  closeCartFn();
+});
+
+// Quick view modal
+document.getElementById('closeModal').addEventListener('click', () => document.getElementById('quickViewModal').classList.remove('open'));
+document.getElementById('quickViewModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) e.currentTarget.classList.remove('open'); });
+
+// Search
+function openSearch() {
+  const o = document.getElementById('searchOverlay');
+  o.style.opacity = '1'; 
+  o.style.pointerEvents = 'all';
+  document.getElementById('searchInput').focus();
+  document.getElementById('searchInput').value = '';
+  currentSearchFilter = 'all';
+  updateSearchResults('');
+}
+
+function closeSearch() {
+  const o = document.getElementById('searchOverlay');
+  o.style.opacity = '0'; 
+  o.style.pointerEvents = 'none';
+  document.getElementById('searchInput').value = '';
+}
+
+function updateSearchResults(query) {
+  const resultsContainer = document.getElementById('searchResults');
+  let filtered = products;
+  
+  // Filtrar por búsqueda
+  if (query.trim()) {
+    const q = query.toLowerCase().trim();
+    filtered = filtered.filter(p => 
+      p.name.toLowerCase().includes(q) || 
+      p.category.toLowerCase().includes(q) ||
+      p.detail.toLowerCase().includes(q)
+    );
+  }
+  
+  // Filtrar por categoría
+  if (currentSearchFilter !== 'all') {
+    filtered = filtered.filter(p => p.category === currentSearchFilter);
+  }
+  
+  // Mostrar resultados
+  if (filtered.length === 0) {
+    resultsContainer.innerHTML = `
+      <div class="text-center py-16">
+        <i data-lucide="search" class="w-12 h-12 text-gray-300 mx-auto mb-4"></i>
+        <p class="text-gray-500 font-medium">No encontramos productos</p>
+        <p class="text-gray-400 text-sm mt-1">Intenta con otro nombre o categoría</p>
+      </div>
+    `;
+  } else {
+    resultsContainer.innerHTML = filtered.map(p => `
+      <div class="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 flex items-center gap-4 p-3">
+        <div class="w-20 h-20 rounded-lg bg-gradient-to-br ${p.color} flex-shrink-0 overflow-hidden flex items-center justify-center">
+          <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover" loading="lazy" onerror="this.style.display='none'">
+        </div>
+        <div class="flex-1 min-w-0">
+          <h3 class="font-medium text-sm text-brand-dark truncate">${p.name}</h3>
+          <p class="text-xs text-gray-500 mb-2">${p.category} • ${p.unit}</p>
+          <p class="text-brand-accent font-semibold text-sm">$${p.price.toLocaleString()}</p>
+        </div>
+        <div class="flex gap-2 flex-shrink-0">
+          <button onclick="addToCart(${p.id});closeSearch();showToast('${p.name} añadido')" class="w-9 h-9 rounded-lg bg-brand-dark text-white flex items-center justify-center hover:bg-brand-accent transition-colors" aria-label="Agregar">
+            <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+          </button>
+          <button onclick="openQuickView(${p.id})" class="w-9 h-9 rounded-lg bg-brand-light text-brand-dark flex items-center justify-center hover:bg-brand-accent hover:text-white transition-colors" aria-label="Detalles">
+            <i data-lucide="eye" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    `).join('');
+  }
+  lucide.createIcons();
+}
+
+document.getElementById('searchBtn').addEventListener('click', openSearch);
+document.getElementById('closeSearch').addEventListener('click', closeSearch);
+
+// Búsqueda en tiempo real
+let searchTimeout;
+document.getElementById('searchInput').addEventListener('keyup', (e) => {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    updateSearchResults(e.target.value);
+  }, 200);
+});
+
+// Filtros de categoría
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => {
+      b.classList.remove('bg-brand-dark', 'text-white', 'border-brand-dark');
+      b.classList.add('bg-white', 'text-gray-700', 'border-gray-300');
+    });
+    btn.classList.add('bg-brand-dark', 'text-white', 'border-brand-dark');
+    btn.classList.remove('bg-white', 'text-gray-700', 'border-gray-300');
+    currentSearchFilter = btn.dataset.filter;
+    updateSearchResults(document.getElementById('searchInput').value);
+  });
+});
+
+// Tecla ESC para cerrar búsqueda
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeSearch();
+});
+
+// Cerrar búsqueda al hacer click en el overlay
+document.getElementById('searchOverlay').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) closeSearch();
+});
+
+// Blog articles - CAMBIAR LAS IMÁGENES AQUÍ
+const blogArticles = [
+  {
+    id: 1,
+    title: 'Cómo conservar correctamente tus tubérculos',
+    excerpt: 'Aprende las mejores prácticas para mantener frescos la yuca, ñame y plátanos en tu cocina por más tiempo.',
+    content: 'Los tubérculos son alimentos versátiles y nutritivos que pueden durar semanas si se almacenan correctamente. Para la yuca y el ñame, guárdalos en un lugar fresco, seco y oscuro, preferiblemente en una bolsa de papel. Evita el refrigerador a menos que ya estén pelados. Los plátanos deben mantenerse a temperatura ambiente hasta que se maduren. Si compras en bulto, separa los que usarás esta semana del resto. Nuestra calidad garantiza máxima durabilidad en tus alimentos.',
+    author: 'Equipo AgroCaribe',
+    date: '15 Dic 2024',
+    color: 'from-yellow-50 to-amber-100',
+    image: 'https://i.ibb.co/fzB1ggjb/IMG-20260502-WA0020.jpg?w=600&h=400&fit=crop' // BLOG IMAGEN 1: Cambiar URL aquí
+  },
+  {
+    id: 2,
+    title: 'Carnes de cerdo: Cortes y usos culinarios',
+    excerpt: 'Descubre qué corte de cerdo es ideal para cada receta y cómo sacarle el máximo provecho.',
+    content: 'El cerdo es una carne versátil con múltiples cortes para diferentes preparaciones. El lomo es perfecto para asar, las costillas para guisos, la pierna para cocidos y la paleta para carnes deshebradas. La panceta/tocino es ideal para dar sabor a tus platos. Cada corte tiene características únicas que lo hacen especial. En AgroDistribuidores del Caribe, todos nuestros cortes de cerdo se venden a $18.000 por kilo con la garantía de frescura y calidad que nuestros clientes esperan. Visita nuestro blog regularmente para más recetas.',
+    author: 'Chef Carlos M.',
+    date: '12 Dic 2024',
+    color: 'from-red-50 to-orange-100',
+    image: 'https://i.ibb.co/m57BWPjk/Whats-App-Image-2026-05-04-at-5-09-43-PM.jpg?w=600&h=400&fit=crop' // BLOG IMAGEN 2: Cambiar URL aquí
+  },
+  {
+    id: 3,
+    title: 'Ventajas del comercio agrícola local',
+    excerpt: 'Entiende por qué comprar productos locales es mejor para ti, tu familia y tu región.',
+    content: 'El comercio agrícola local fortalece nuestra comunidad. Cuando compras directamente con distribuidores como Agrodistribuidores del Caribe, aseguras la frescura máxima de los productos, apoyas a los agricultores locales y reduces tu huella de carbono. Los productos viajan menos tiempo, lo que significa más nutrientes y mejor sabor. Además, conoces de dónde viene tu comida. En AgroDistribuidores del Caribe, trabajamos directamente con fincas de la región para garantizar la mejor calidad a los mejores precios. ¡Sé parte del movimiento de consumo consciente!',
+    author: 'María López',
+    date: '10 Dic 2024',
+    color: 'from-green-50 to-emerald-100',
+    image: 'https://i.ibb.co/ycsWmsRJ/IMG-20260502-WA0012.jpg?w=600&h=400&fit=crop' // BLOG IMAGEN 3: Cambiar URL aquí
+  }
+];
+
+// GALERÍA - EDITA AQUÍ LAS 10 FOTOS Y TEXTOS
+const galleryItems = [
+  {
+    id: 1,
+    title: 'Entornos de cosecha',
+    description: 'Nuestro entorno de cosecha',
+    image: 'https://i.ibb.co/6RPf9Q9Q/Whats-App-Image-2026-05-08-at-8-44-39-PM.jpg?w=800&h=600&fit=crop' // FOTO 1: Cambiar URL aquí
+  },
+  {
+    id: 2,
+    title: 'Siembra',
+    description: 'Cosecha',
+    image: 'https://i.ibb.co/s9yz91jv/Whats-App-Image-2026-05-08-at-8-49-40-PM.jpg?w=800&h=600&fit=crop' // FOTO 2: Cambiar URL aquí
+  },
+  {
+    id: 3,
+    title: 'Maiz',
+    description: 'Cosechado con cuidado para mantener su integridad y frescura.',
+    image: 'https://i.ibb.co/7DJsC2f/Whats-App-Image-2026-05-08-at-8-44-25-PM.jpg?w=800&h=600&fit=crop' // FOTO 3: Cambiar URL aquí
+  },
+  {
+    id: 4,
+    title: 'Pochocho',
+    description: 'Pochocho entrega cliente feliz',
+    image: 'https://i.ibb.co/mFtzkMsW/IMG-20260502-WA0010.jpg?w=800&h=600&fit=crop' // FOTO 4: Cambiar URL aquí
+  },
+  {
+    id: 5,
+    title: 'Tiempos sin estres',
+    description: 'Naturaleza en su maximo esplendor',
+    image: 'https://i.ibb.co/RTJD9vJn/IMG-20260515-WA0003.jpg?w=800&h=600&fit=crop' // FOTO 5: Cambiar URL aquí
+  },
+  {
+    id: 6,
+    title: 'Maiz',
+    description: 'Maiz',
+    image: 'https://i.ibb.co/dsmgRZbS/Whats-App-Image-2026-05-08-at-8-41-38-PM.jpg?w=800&h=600&fit=crop' // FOTO 6: Cambiar URL aquí
+  },
+  {
+    id: 7,
+    title: 'Otras cosechas',
+    description: 'Cosecha',
+    image: 'https://i.ibb.co/d4TjGYss/Whats-App-Image-2026-05-08-at-8-43-41-PM.jpg?w=800&h=600&fit=crop' // FOTO 7: Cambiar URL aquí
+  },
+  {
+    id: 8,
+    title: 'Mangos',
+    description: 'Mangos Jugosos',
+    image: 'https://i.ibb.co/C50qJXY1/IMG-20260502-WA0019.jpg?w=800&h=600&fit=crop' // FOTO 8: Cambiar URL aquí
+  },
+  {
+    id: 9,
+    title: 'Entrega de Pedidos',
+    description: 'Embalamos cuidadosamente cada pedido para garantizar que llegue en perfecto estado.',
+    image: 'https://i.ibb.co/RL6NVv4/IMG-20260502-WA0013.jpg?w=800&h=600&fit=crop' // FOTO 9: Cambiar URL aquí
+  },
+  {
+    id: 10,
+    title: 'Satisfacción del Cliente',
+    description: 'Nuestro compromiso es brindarte productos frescos y servicio excepcional cada día.',
+    image: 'https://i.ibb.co/ycsWmsRJ/IMG-20260502-WA0012.jpg?w=800&h=600&fit=crop' // FOTO 10: Cambiar URL aquí
+  }
+];
+
+let currentGalleryPhoto = 0;
+
+// Render gallery preview (3 items)
+function renderGalleryPreview() {
+  const preview = document.getElementById('galleryPreview');
+  preview.innerHTML = galleryItems.slice(0, 3).map((item, idx) => `
+    <div class="group relative aspect-square rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 scroll-reveal bg-gray-100">
+      <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover" loading="lazy" onerror="this.style.display='none'">
+      <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+        <div class="text-white">
+          <h3 class="font-semibold text-sm line-clamp-1">${item.title}</h3>
+          <p class="text-xs text-white/80 line-clamp-1">${item.description}</p>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  initScrollReveal();
+  lucide.createIcons();
+}
+
+// Render full gallery (10 items in modal)
+function renderFullGallery() {
+  const grid = document.getElementById('galleryGrid');
+  grid.innerHTML = galleryItems.map((item, idx) => `
+    <button onclick="openGalleryModal(${idx})" class="group relative aspect-square rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer bg-gray-100">
+      <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover" loading="lazy" onerror="this.style.display='none'">
+      <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+        <div class="text-white">
+          <h3 class="font-semibold text-sm line-clamp-1">${item.title}</h3>
+          <p class="text-xs text-white/80 line-clamp-1">${item.description}</p>
+        </div>
+      </div>
+    </button>
+  `).join('');
+  lucide.createIcons();
+}
+
+function openFullGallery() {
+  renderFullGallery();
+  document.getElementById('fullGalleryModal').style.opacity = '1';
+  document.getElementById('fullGalleryModal').style.pointerEvents = 'all';
+}
+
+function closeFullGallery() {
+  document.getElementById('fullGalleryModal').style.opacity = '0';
+  document.getElementById('fullGalleryModal').style.pointerEvents = 'none';
+}
+
+// Gallery modal
+function openGalleryModal(idx) {
+  currentGalleryPhoto = idx;
+  updateGalleryModal();
+  document.getElementById('galleryModal').style.opacity = '1';
+  document.getElementById('galleryModal').style.pointerEvents = 'all';
+}
+
+function updateGalleryModal() {
+  const item = galleryItems[currentGalleryPhoto];
+  document.getElementById('galleryModalImage').innerHTML = `
+    <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover" loading="lazy" onerror="this.style.display='none'">
+  `;
+  document.getElementById('galleryModalTitle').textContent = item.title;
+  document.getElementById('galleryModalDesc').textContent = item.description;
+  document.getElementById('galleryCounter').textContent = `${currentGalleryPhoto + 1} / ${galleryItems.length}`;
+  
+  // Actualizar botones de navegación
+  document.getElementById('galleryPrev').disabled = currentGalleryPhoto === 0;
+  document.getElementById('galleryNext').disabled = currentGalleryPhoto === galleryItems.length - 1;
+  document.getElementById('galleryPrev').style.opacity = currentGalleryPhoto === 0 ? '0.3' : '1';
+  document.getElementById('galleryNext').style.opacity = currentGalleryPhoto === galleryItems.length - 1 ? '0.3' : '1';
+}
+
+function nextGalleryPhoto() {
+  if (currentGalleryPhoto < galleryItems.length - 1) {
+    currentGalleryPhoto++;
+    updateGalleryModal();
+  }
+}
+
+function prevGalleryPhoto() {
+  if (currentGalleryPhoto > 0) {
+    currentGalleryPhoto--;
+    updateGalleryModal();
+  }
+}
+
+function closeGalleryModal() {
+  document.getElementById('galleryModal').style.opacity = '0';
+  document.getElementById('galleryModal').style.pointerEvents = 'none';
+}
+
+// Render blog
+function renderBlog() {
+  const grid = document.getElementById('blogGrid');
+  grid.innerHTML = blogArticles.map(a => `
+    <div class="scroll-reveal bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
+      <div class="h-48 bg-gradient-to-br ${a.color} overflow-hidden">
+        <img src="${a.image}" alt="${a.title}" class="w-full h-full object-cover" loading="lazy" onerror="this.style.display='none'">
+      </div>
+      <div class="p-5">
+        <p class="text-xs text-brand-accent font-semibold mb-2 uppercase">${a.date}</p>
+        <h3 class="font-serif text-lg font-bold mb-2 text-brand-dark line-clamp-2">${a.title}</h3>
+        <p class="text-sm text-gray-600 mb-4 line-clamp-2">${a.excerpt}</p>
+        <button onclick="openBlogArticle(${a.id})" class="text-sm font-medium text-brand-accent hover:text-brand-dark transition-colors">Leer más →</button>
+      </div>
+    </div>
+  `).join('');
+  initScrollReveal();
+}
+
+function openBlogArticle(id) {
+  const a = blogArticles.find(x => x.id === id);
+  document.getElementById('modalContent').innerHTML = `
+    <div class="h-64 rounded-xl bg-gradient-to-br ${a.color} overflow-hidden mb-6">
+      <img src="${a.image}" alt="${a.title}" class="w-full h-full object-cover" loading="lazy" onerror="this.style.display='none'">
+    </div>
+    <p class="text-xs text-brand-accent font-semibold mb-3 uppercase">${a.date} • Por ${a.author}</p>
+    <h2 class="font-serif text-3xl font-bold mb-4 text-brand-dark">${a.title}</h2>
+    <div class="prose prose-sm max-w-none">
+      <p class="text-gray-700 leading-relaxed">${a.content}</p>
+    </div>
+    <div class="mt-6 pt-4 border-t flex items-center gap-3">
+      <div class="w-12 h-12 rounded-full bg-brand-accent/20 flex items-center justify-center">
+        <i data-lucide="user" class="w-5 h-5 text-brand-accent"></i>
+      </div>
+      <div>
+        <p class="font-semibold text-brand-dark text-sm">${a.author}</p>
+        <p class="text-xs text-gray-500">Escritor de AgroCaribe</p>
+      </div>
+    </div>
+  `;
+  document.getElementById('quickViewModal').classList.add('open');
+  lucide.createIcons();
+}
+
+// Init
+renderProducts();
+renderGalleryPreview();
+renderBlog();
+initScrollReveal();
+lucide.createIcons();
+
+// Element SDK
+window.elementSdk.init({
+  defaultConfig,
+  onConfigChange: async (config) => {
+    const c = { ...defaultConfig, ...config };
+    document.getElementById('logo-text').textContent = c.brand_name;
+    document.querySelectorAll('span#logo-text').forEach(el => el.textContent = c.brand_name);
+    document.getElementById('heroTitle').textContent = c.hero_title;
+    document.getElementById('heroSubtitle').textContent = c.hero_subtitle;
+    document.getElementById('promoText').textContent = c.promo_text;
+    document.getElementById('gallery-title').textContent = c.gallery_title;
+    document.getElementById('footer-whatsapp').textContent = c.whatsapp_number;
+    document.getElementById('footer-phone').textContent = c.whatsapp_number;
+    document.getElementById('heroSlide1Img').src = c.hero_slide_1_image;
+    document.getElementById('heroSlide2Img').src = c.hero_slide_2_image;
+    document.getElementById('heroSlide3Img').src = c.hero_slide_3_image;
+    whatsappNumber = c.whatsapp_number.replace(/[^0-9]/g, '');
+    
+    document.body.style.color = c.text_color;
+    document.querySelectorAll('.font-serif').forEach(el => el.style.fontFamily = `${c.font_family}, Playfair Display, Georgia, serif`);
+  },
+  mapToCapabilities: (config) => {
+    const c = { ...defaultConfig, ...config };
+    return {
+      recolorables: [
+        { get: () => c.background_color, set: v => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+        { get: () => c.surface_color, set: v => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+        { get: () => c.text_color, set: v => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+        { get: () => c.primary_action_color, set: v => { config.primary_action_color = v; window.elementSdk.setConfig({ primary_action_color: v }); } },
+        { get: () => c.secondary_action_color, set: v => { config.secondary_action_color = v; window.elementSdk.setConfig({ secondary_action_color: v }); } }
+      ],
+      borderables: [],
+      fontEditable: { get: () => c.font_family, set: v => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
+      fontSizeable: { get: () => c.font_size, set: v => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); } }
+    };
+  },
+  mapToEditPanelValues: (config) => {
+    const c = { ...defaultConfig, ...config };
+    return new Map([
+      ['brand_name', c.brand_name],
+      ['hero_title', c.hero_title],
+      ['hero_subtitle', c.hero_subtitle],
+      ['promo_text', c.promo_text],
+      ['whatsapp_number', c.whatsapp_number],
+      ['gallery_title', c.gallery_title],
+      ['hero_slide_1_image', c.hero_slide_1_image],
+      ['hero_slide_2_image', c.hero_slide_2_image],
+      ['hero_slide_3_image', c.hero_slide_3_image]
+    ]);
+  }
+});
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f7a400d71a027d4',t:'MTc3ODA5NDI2MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
